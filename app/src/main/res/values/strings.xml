@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">QGSMS</string>
+    <string name="import_from_server">从服务器导入</string>
+    <string name="import_manually">手动导入</string>
+    <string name="pick_all">全选</string>
+    <string name="delete">删除</string>
+    <string name="sent_sms">发送短信</string>
+    <string name="name">名字</string>
+    <string name="phone">电话</string>
+</resources>

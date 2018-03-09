@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="groups">
+        <item>前端组</item>
+        <item>后台组</item>
+        <item>嵌入式组</item>
+        <item>手游组</item>
+        <item>移动组</item>
+        <item>数据挖掘组</item>
+        <item>设计师组</item>
+    </string-array>
+</resources>
