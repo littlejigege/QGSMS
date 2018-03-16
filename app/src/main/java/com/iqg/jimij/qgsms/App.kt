@@ -11,7 +11,6 @@ import com.mobile.utils.Utils
 class App : Application() {
     companion object {
         lateinit var db: ContacterDatabase
-        val serverAdress = "http://10.21.48.11:8080/official-website/recruit/sms?group="
     }
 
     override fun onCreate() {
@@ -21,7 +20,9 @@ class App : Application() {
     }
 
     private fun setupRoom() {
-        db = Room.databaseBuilder(this, ContacterDatabase::class.java, "database")
-                .build()
+        db = Room.databaseBuilder(this, ContacterDatabase::class.java, "database").apply {
+            //Room迁移自动删库
+            fallbackToDestructiveMigration()
+        }.build()
     }
 }

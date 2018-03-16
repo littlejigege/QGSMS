@@ -28,7 +28,7 @@
         android:elevation="5dp"
         android:ems="10"
         android:gravity="top"
-        android:hint="编辑短信内容，例如：{name}同学你好，你被耍了//{name}会被替换成对应的名字"
+        android:hint="@string/hint"
         app:layout_constraintBottom_toTopOf="@+id/btnSend2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

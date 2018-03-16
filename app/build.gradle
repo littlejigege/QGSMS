@@ -18,14 +18,21 @@ android {
         applicationId "com.iqg.jimij.qgsms"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "识别女生版"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_GET_ADDRESS", "\"http://result.eolinker.com/8SCEh693a57dee5416aebc1ca12fa6206cdf090dd3ade88?uri=123\""
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "API_GET_ADDRESS", "\"http://result.eolinker.com/8SCEh693a57dee5416aebc1ca12fa6206cdf090dd3ade88?uri=123\""
         }
     }
 }
@@ -42,7 +49,12 @@ dependencies {
     compile 'com.github.littlejigege:suger:+'
     //Room
     implementation 'android.arch.persistence.room:runtime:1.0.0'
+    //ViewModel and LiveData
+    implementation 'android.arch.lifecycle:extensions:1.1.0'
     //Gson
     implementation 'com.google.code.gson:gson:2.8.2'
+    //RxTool
+    compile 'com.github.vondear:RxTools:v1.7.7.3'
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+    implementation files('libs/pinyin4j-2.5.0.jar')
 }

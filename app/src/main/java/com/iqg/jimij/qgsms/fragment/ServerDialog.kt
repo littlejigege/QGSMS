@@ -1,5 +1,6 @@
 package com.iqg.jimij.qgsms.fragment
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.*
@@ -7,6 +8,7 @@ import android.widget.AdapterView
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.iqg.jimij.qgsms.App
+import com.iqg.jimij.qgsms.Const
 import com.iqg.jimij.qgsms.R
 import com.iqg.jimij.qgsms.adapter.ContacterAdapter
 import com.iqg.jimij.qgsms.mainpage.MainActivity
@@ -46,7 +48,6 @@ class ServerDialog : DialogFragment() {
                 adapter.getSelected().forEach {
                     App.db.contacterDao().insertContacter(it)
                 }
-                (activity as MainActivity).presenter.getContacterFromDB()
                 inUiThread { dismiss() }
             }
         }
@@ -54,6 +55,14 @@ class ServerDialog : DialogFragment() {
         rootView.btnPickAll2.setOnClickListener {
             adapter.selectAll()
         }
+        (activity as MainActivity).mModel.getByGroup(1).observe(this, Observer {
+            rootView.progressBar.gone()
+            it?.let {
+                adapter.setData(it)
+                showToast("已报名人数：${it.size}")
+            }
+
+        })
         setupSpinner()
         return rootView
     }
@@ -71,32 +80,8 @@ class ServerDialog : DialogFragment() {
     }
 
     private fun getContacters(group: Int) {
-
         rootView.progressBar.visiable()
-        coroutine({
-            var text: String = ""
-            try {
-                text = URL("${App.serverAdress}$group").readText()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                showToast("与服务器连接失败，请确认连接校园网")
-            }
-            println(text)
-            text
-        }) {
-            var list: MutableList<Contacter> = mutableListOf()
-            if (it != "[]") {
-                try {
-                    list = Gson().fromJson(it, object : TypeToken<MutableList<Contacter>>() {}.type)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            } else{
-                showToast("暂无数据")
-            }
-            rootView.progressBar.gone()
-            adapter.setData(list)
-        }
+        (activity as MainActivity).mModel.getByGroup(group)
     }
 
     override fun onResume() {

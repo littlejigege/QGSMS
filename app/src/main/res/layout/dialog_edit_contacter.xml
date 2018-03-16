@@ -5,6 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phoneInputLayout">
+
+        <RadioButton
+            android:id="@+id/rbtnGirl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="女" />
+
+        <RadioButton
+            android:id="@+id/rbtnBoy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:text="男" />
+    </RadioGroup>
+
+
     <android.support.design.widget.TextInputLayout
         android:id="@+id/nameInputLayout"
         android:layout_width="match_parent"
@@ -35,5 +65,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/phone"
             android:inputType="phone" />
+
     </android.support.design.widget.TextInputLayout>
+
 </android.support.constraint.ConstraintLayout>

@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.iqg.jimij.qgsms.App
+import com.iqg.jimij.qgsms.Const
 import com.iqg.jimij.qgsms.R
 import com.iqg.jimij.qgsms.model.beans.Contacter
 import com.mobile.utils.permission.Permission
@@ -34,7 +36,7 @@ class SendsmsDialog() : DialogFragment() {
             if (message.isNotEmpty()) {
                 contacters.forEach {
                     //确保获得权限
-                        SmsManager.getDefault().sendTextMessage(it.phone, null, message.replace("{name}", it.name), null, null)
+                    SmsManager.getDefault().sendTextMessage(it.phone, null, message.replace("{name}", it.name).replace("{sex}", if (it.sex == Const.BOY) "师弟" else "师妹"), null, null)
                 }
                 showToast("发送完成")
                 dismiss()

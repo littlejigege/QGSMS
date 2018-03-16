@@ -7,4 +7,9 @@
     <string name="sent_sms">发送短信</string>
     <string name="name">名字</string>
     <string name="phone">电话</string>
+    <string name="hint">编辑短信内容，例如：{name}{sex}你好，你被刷了\n
+        //{name}会被替换成对应的名字\n
+    //{sex}会被替换成师弟/师妹\n\n\n
+    PS：不要超过200字</string>
+    <string name="sex">SEX</string>
 </resources>

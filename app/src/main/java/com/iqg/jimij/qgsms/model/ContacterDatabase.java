@@ -9,7 +9,7 @@ import com.iqg.jimij.qgsms.model.beans.Contacter;
 /**
  * Created by jimiji on 2017/11/29.
  */
-@Database(entities = {Contacter.class}, version = 1,exportSchema = false)
+@Database(entities = {Contacter.class}, version = 2,exportSchema = false)
 public abstract class ContacterDatabase extends RoomDatabase {
     public abstract ContacterDao contacterDao();
 }

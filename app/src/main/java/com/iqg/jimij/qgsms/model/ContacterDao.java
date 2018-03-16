@@ -1,5 +1,6 @@
 package com.iqg.jimij.qgsms.model;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -15,10 +16,12 @@ import java.util.List;
  */
 @Dao
 public interface ContacterDao {
-    @Query("SELECT * FROM contacter")
-    public List<Contacter> loadAllContacters();
+    @Query("SELECT * FROM contacter ")
+    public LiveData<List<Contacter>> loadAllContacters();
+    @Query("SELECT * FROM contacter WHERE name = :name LIMIT 1 ")
+    public Contacter getByName(String name);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)//防止重重突，保证没有重复
     public void insertContacter(Contacter... contacters);
 
     @Delete

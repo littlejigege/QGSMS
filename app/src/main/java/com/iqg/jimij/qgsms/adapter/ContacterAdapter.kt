@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.iqg.jimij.qgsms.App
+import com.iqg.jimij.qgsms.Const
 import com.iqg.jimij.qgsms.R
 import com.iqg.jimij.qgsms.model.beans.Contacter
 import com.mobile.utils.gone
@@ -18,7 +19,7 @@ import kotlin.concurrent.thread
  * Created by jimiji on 2017/11/29.
  */
 class ContacterAdapter(ctx: Context, val data: MutableList<Contacter> = mutableListOf()) : ArrayAdapter<Contacter>(ctx, R.layout.item_contacter, data) {
-    private var needToShowCheckBow: Boolean = true
+    private var lastPos = 0
     fun setData(data: MutableList<Contacter>) {
         clear()
         addAll(data)
@@ -42,23 +43,25 @@ class ContacterAdapter(ctx: Context, val data: MutableList<Contacter> = mutableL
         thread {
             list.forEach { App.db.contacterDao().deleteContacter(it) }
         }
-        needToShowCheckBow = true
         notifyDataSetChanged()
     }
 
-    fun showCheckBox() {
-        needToShowCheckBow = true
+    fun cancelSelected() {
+        data.forEach { it.isSelected = false }
         notifyDataSetChanged()
     }
 
-    fun hideCheckBox() {
-        needToShowCheckBow = false
-        data.forEach { it.isSelected = false }
-        notifyDataSetChanged()
-    }
-    fun cancelSelected(){
-        data.forEach { it.isSelected = false }
-        notifyDataSetChanged()
+    fun getPosByPinyin(py: Char): Int {
+        (0..data.lastIndex).forEach {
+            if (data[it].pinying == py) {
+                lastPos = it
+                println(data[it].pinying + "  " + py)
+                println("lastpos == $lastPos")
+                return it
+            }
+        }
+
+        return lastPos
     }
 
     override fun getCount(): Int {
@@ -75,23 +78,18 @@ class ContacterAdapter(ctx: Context, val data: MutableList<Contacter> = mutableL
             view = (convertView.tag as ViewHolder).view
         }
         with(contacter) {
-            if (needToShowCheckBow) {
-                view.checkBox.visiable()
-                view.checkBox.isChecked = isSelected
-                //设置checkbox
-                view.checkBox.setOnClickListener {
-                    isSelected = view.checkBox.isChecked
-                }
-                //设置其他view
-//                view.setOnClickListener {
-//                    view.checkBox.toggle()
-//                    isSelected = view.checkBox.isChecked
-//                }
-            } else {
-                view.checkBox.gone()
-            }
+            view.checkBox.isChecked = isSelected
+            //设置checkbox
+            view.checkBox.isClickable = false
+
             view.contacterName.text = name
             view.contacterPhone.text = phone
+            println(sex)
+            if (sex == Const.GIRL) {
+                view.imageSex.visiable()
+            } else {
+                view.imageSex.gone()
+            }
         }
         return view
     }

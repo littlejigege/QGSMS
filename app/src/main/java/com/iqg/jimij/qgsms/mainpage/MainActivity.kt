@@ -1,5 +1,7 @@
 package com.iqg.jimij.qgsms.mainpage
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
@@ -8,6 +10,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.iqg.jimij.qgsms.App
+import com.iqg.jimij.qgsms.BuildConfig
+import com.iqg.jimij.qgsms.Const
 import com.iqg.jimij.qgsms.R
 import com.iqg.jimij.qgsms.fragment.ServerDialog
 import com.iqg.jimij.qgsms.adapter.ContacterAdapter
@@ -18,15 +22,21 @@ import com.mobile.utils.ActivityManager
 import com.mobile.utils.permission.Permission
 import com.mobile.utils.permission.PermissionCompatActivity
 import com.mobile.utils.showToast
+import com.vondear.rxtools.view.sidebar.WaveSideBarView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_contacter.view.*
+import net.sourceforge.pinyin4j.PinyinHelper
+import java.net.URL
+import java.util.*
 import kotlin.concurrent.thread
 
-class MainActivity : PermissionCompatActivity(), com.iqg.jimij.qgsms.mainpage.View {
+class MainActivity : PermissionCompatActivity(), WaveSideBarView.OnTouchLetterChangeListener {
+
 
     lateinit var sheet: BottomSheetBehavior<NestedScrollView>
     lateinit var adapter: ContacterAdapter
-    val presenter = MainPresenter()
+    val mModel: MainViewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
+
     val listViewBottom by lazy { listView.bottom }//记录原始listView底部坐标
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +45,33 @@ class MainActivity : PermissionCompatActivity(), com.iqg.jimij.qgsms.mainpage.Vi
         setupListView()//设置列表
         setupBottomSheet()//设置底部菜单
         setupButtons()
-        presenter.takeView(this)
-        presenter.getContacterFromDB()
+        //观察数据库数据
+        mModel.contacterFromDB.observe(this, Observer {
+            it?.let {
+                updateTitle(it.size, adapter.getSelected().size)
+                it.sort()
+                adapter.setData(it)
+            }
+        })
+        //获取动态接口
+        thread {
+            try {
+                Const.serverAdress = URL(BuildConfig.API_GET_ADDRESS).readText()
+                println(Const.serverAdress)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showToast("获取服务器地址失败，请确保网络畅通")
+            }
+        }
 
+        indexBar.setOnTouchLetterChangeListener(this)
     }
 
     private fun setupButtons() {
-        btnPickAll.setOnClickListener { adapter.selectAll() }
+        btnPickAll.setOnClickListener {
+            adapter.selectAll()
+            updateTitle(adapter.data.size, adapter.getSelected().size)
+        }
         btnDelete.setOnClickListener {
             //删除并关闭菜单
             adapter.deleteSelected()
@@ -85,19 +115,8 @@ class MainActivity : PermissionCompatActivity(), com.iqg.jimij.qgsms.mainpage.Vi
             }
             view.checkBox.toggle()
             adapter.data[position].isSelected = view.checkBox.isChecked
+            updateTitle(adapter.data.size, adapter.getSelected().size)
         }
-//        listView.setOnItemLongClickListener { _, _, position, _ ->
-//            if (sheet.state == BottomSheetBehavior.STATE_COLLAPSED) {
-//                adapter.data[position].isSelected = true
-//                adapter.showCheckBox()
-//                sheet.state = BottomSheetBehavior.STATE_EXPANDED
-//            }
-//            true
-//        }
-    }
-
-    override fun showListView(contacters: MutableList<Contacter>) {
-        adapter.setData(contacters)
     }
 
 
@@ -113,15 +132,18 @@ class MainActivity : PermissionCompatActivity(), com.iqg.jimij.qgsms.mainpage.Vi
 
             }
             R.id.import_manually -> {
-                EditContacterDialog(this, presenter).show()
+                EditContacterDialog(this, mModel).show()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onDestroy() {
-        presenter.dropView()
-        super.onDestroy()
+    private fun updateTitle(total: Int, selected: Int) {
+        title = "QGSMS 人数:$total 已选:$selected"
+    }
+
+    override fun onLetterChange(p0: String) {
+        listView.smoothScrollToPositionFromTop(adapter.getPosByPinyin(p0[0].toLowerCase()),0)
     }
 
     override fun onBackPressed() {
