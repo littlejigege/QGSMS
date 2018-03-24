@@ -27,6 +27,7 @@ public class Contacter implements Comparable<Contacter> {
     public boolean isSelected;
 
 
+
     public char getPinying() {
         String[] pinying = PinyinHelper.toHanyuPinyinStringArray(name.charAt(0));
         char var;
