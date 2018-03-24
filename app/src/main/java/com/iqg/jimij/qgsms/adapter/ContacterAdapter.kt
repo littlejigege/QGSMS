@@ -55,8 +55,6 @@ class ContacterAdapter(ctx: Context, val data: MutableList<Contacter> = mutableL
         (0..data.lastIndex).forEach {
             if (data[it].pinying == py) {
                 lastPos = it
-                println(data[it].pinying + "  " + py)
-                println("lastpos == $lastPos")
                 return it
             }
         }
@@ -84,7 +82,6 @@ class ContacterAdapter(ctx: Context, val data: MutableList<Contacter> = mutableL
 
             view.contacterName.text = name
             view.contacterPhone.text = phone
-            println(sex)
             if (sex == Const.GIRL) {
                 view.imageSex.visiable()
             } else {

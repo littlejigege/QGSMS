@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.vondear.rxtools.view.sidebar.WaveSideBarView
-        android:id="@+id/indexBar"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"/>
+    <!--<com.vondear.rxtools.view.sidebar.WaveSideBarView-->
+        <!--android:id="@+id/indexBar"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginBottom="50dp"/>-->
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/bottomSheet"

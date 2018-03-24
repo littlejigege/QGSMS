@@ -18,9 +18,10 @@ android {
         applicationId "com.iqg.jimij.qgsms"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 2
+        versionCode 1
         versionName "识别女生版"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 
     }
     buildTypes {
@@ -49,12 +50,16 @@ dependencies {
     compile 'com.github.littlejigege:suger:+'
     //Room
     implementation 'android.arch.persistence.room:runtime:1.0.0'
+    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
     //ViewModel and LiveData
     implementation 'android.arch.lifecycle:extensions:1.1.0'
     //Gson
     implementation 'com.google.code.gson:gson:2.8.2'
     //RxTool
-    compile 'com.github.vondear:RxTools:v1.7.7.3'
-    annotationProcessor "android.arch.persistence.room:compiler:1.0.0"
+//    compile 'com.github.vondear:RxTools:v1.7.7.3'
+    //hotfix
+    implementation 'com.aliyun.ams:alicloud-android-hotfix:3.2.0'
+    //bmob
+    compile 'cn.bmob.android:bmob-sdk:3.5.5'
     implementation files('libs/pinyin4j-2.5.0.jar')
 }

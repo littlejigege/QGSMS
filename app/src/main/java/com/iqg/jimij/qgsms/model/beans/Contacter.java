@@ -5,6 +5,7 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import com.google.gson.annotations.Expose;
 import com.iqg.jimij.qgsms.Const;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
